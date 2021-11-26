@@ -1,0 +1,61 @@
+-- truffle migrate --compile-all --reset --network development
+-- truffle console --network development
+-- truffle test --show-events --network development
+
+
+// https://www.trufflesuite.com/docs/truffle/getting-started/interacting-with-your-contracts
+// https://forum.openzeppelin.com/t/transferring-erc721-tokens/4726/2
+// https://medium.com/consensys-diligence/mythx-and-truffle-security-painless-smart-contract-security-testing-6d0fe5e938da
+// https://fleek.co/hosting/
+
+const shop_address = '0x43eA4036e41bFdc90c9ADf0Fc05935bA2f62bBBa'
+
+const shop = await Shop.deployed();
+const bca = await BlockchainArt.deployed();
+-- let bca2 =  await BlockchainArt.at("0xFfAe5eE66C8451038C8Cc8FC83e192262435d27D");
+-- let bca_i = await BlockchainArt.at("0x0532d0b3C986900ebC80d2f3C5D326Bb20bF553e");
+
+
+
+let accounts = await web3.eth.getAccounts()
+let balance = await instance.getBalance(accounts[0])
+balance.toNumber()
+
+a = '0xB0002a92464E2d84f43E017876211993d0931d8d'
+
+let shop_address = "0x056ABF46c0b3F7166712e728f32AaeD51C2B7624"
+let bca_address = "0x8760B93BFCb62Dbed2Ba6804780CC2752f10612B"
+
+
+let shop = await Shop.at(shop_address)
+let art = await BlockchainArt.at(bca_address)
+
+-- let shop = await Shop.new()
+-- let art = await BlockchainArt.new(shop.address, "A", "B", "C")
+
+
+
+------------
+
+let shop_address = "0xd462D7dF1406f8024923f6577816f72E4843D945"
+let bca_address = "0x4D86160CDad95A0c8506e5D05B71d5e5b314B415"
+
+
+let shop = await Shop.at(shop_address)
+let art = await BlockchainArt.at(bca_address)
+
+
+
+--
+let shopInstance = await Shop.new()
+let artInstance = await BlockchainArt.new(shopInstance.address, "A", "B", "C")
+shopInstance.mintNFT(artInstance.address, 30)
+
+shopInstance.buyItem.sendTransaction(artInstance.address, 0, { from: accounts[0], value: 30} )
+art.ownerOf(0)
+
+
+
+
+
+
