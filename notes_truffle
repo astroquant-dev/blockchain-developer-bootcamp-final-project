@@ -55,7 +55,7 @@ shopInstance.buyItem.sendTransaction(artInstance.address, 0, { from: accounts[0]
 art.ownerOf(0)
 
 
-
+https://github.com/benyaminahmed/nft-image-generator
 
 
 

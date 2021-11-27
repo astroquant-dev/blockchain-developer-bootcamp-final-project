@@ -15,7 +15,7 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     string public uri;
     uint artPrice;
 
-    event Minted(address sender, address to, address approval);
+    event Minted(address sender, uint tokenId, address approval);
 
 
     constructor(address owner, string memory name, string memory symbol, uint price, string memory uri_) ERC721(name, symbol) {
@@ -44,24 +44,9 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
         _safeMint(msg.sender, tokenId);
         setApprovalForAll(contractOwner, true);
 
+        emit Minted(msg.sender, tokenId, contractOwner);
         return tokenId;
     }
-    // function safeMint() public onlyOwner returns (uint) {
-    //     uint tokenId = _tokenIdCounter.current();
-    //     _tokenIdCounter.increment();
-    //     setApprovalForAll(contractOwner, true);
-    //     _safeMint(contractOwner, tokenId);
-    //     return tokenId;
-    // }
-    // function safeMintFor(address payable _to) public onlyOwner returns (uint) {
-    //     uint tokenId = _tokenIdCounter.current();
-    //     _tokenIdCounter.increment();
-    //     _safeMint(_to, tokenId);
-    //     emit Minted(msg.sender, _to, contractOwner);
-    //     return tokenId;
-    // }
-
-    // The following functions are overrides required by Solidity.
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
