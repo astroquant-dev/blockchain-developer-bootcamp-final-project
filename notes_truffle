@@ -57,5 +57,17 @@ art.ownerOf(0)
 
 https://github.com/benyaminahmed/nft-image-generator
 
+import json
+data = {'image': 'https://api.nga.gov/iiif/00004dec-8300-4487-8d89-562d0126b6a1/full/!200,200/0/default.jpg'}
 
+
+l = len(xx)
+
+for i in range(300):
+    q={'image': xx.values[i]}
+    with open(str(i), 'w', encoding='ascii') as f:
+        json.dump(q, f, ensure_ascii=True)
+
+with open(str(i), 'r', encoding='ascii') as f:
+    print(json.load(f))
 

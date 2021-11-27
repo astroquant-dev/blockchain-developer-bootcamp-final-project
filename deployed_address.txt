@@ -1,2 +1,4 @@
+Network: Rinkeby
+
 BlockchainArt: 0xA8a90e950d8dee385b58751fD590e2327AeD88ef
 Shop: 0xf7459bb090cCe1A6FA0803bcE59Bd0B2BdAf0477
