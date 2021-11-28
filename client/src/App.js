@@ -18,9 +18,13 @@ import Figure from 'react-bootstrap/Figure'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
-
+// Rinkeby
 const shopAddress = "0x6559CFFc7CF4d7a00cC393b9A71a43A1deB7F3Eb";
 const artAddress = "0xb9FC8a3fF1b09c50AbE74E4816003a8C5dF36b7a";
+
+// Local 
+// const shopAddress = "0x5eD6fdA623f53cfe08583762E801DCff00caf2E3";
+// const artAddress = "0x41fE557618c9eC503f5bCc155E7f2088d72F3198";
 
 
 
