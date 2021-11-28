@@ -109,9 +109,8 @@ Start by running `truffle console --network development` ensuring that ganache-c
 
 The following set of lines can be run a number of times, to populate the NFT listings:
 
-    q = await art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') });
-    tokenId = q['logs'][2]['args']['tokenId']['words'][0];
-    await shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId);
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') }).then((qqq) => { return parseInt(qqq.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).t(tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId) });
+
 
 The first line mints a new NFT from the BlockchainArt contract. The second line fetches the tokenId for the minted token from the BlockchainArt.Minted event. The third line lists said tokenId in the Shop.
 

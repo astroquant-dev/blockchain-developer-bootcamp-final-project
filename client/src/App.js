@@ -19,52 +19,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 // Rinkeby
-const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
-const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
+// const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
+// const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
 
 // Local 
-// const shopAddress = "0x7cd6ec8E4BFF026429426d59b5aCFC42980F0EAc";
-// const artAddress = "0x9ae9c3FeAE5285d604aa96bb934636119780613e";
+const shopAddress = "0x7cd6ec8E4BFF026429426d59b5aCFC42980F0EAc";
+const artAddress = "0x9ae9c3FeAE5285d604aa96bb934636119780613e";
 
 
 
 class App extends Component {
-    state = { storageValue: 0, web3: null, account: null, shopContract: null, artContract: null, shopOwner: null, artOwner: null, boughtItem: ""};
+    state = { storageValue: 0, web3: null, account: null, shopContract: null, artContract: null, shopOwner: null, artOwner: null, boughtItem: "" };
 
     fetchListedItems = async () => { const shopResponse = await this.state.shopContract.fetchListedItems(); console.log(shopResponse); return shopResponse; }
-    mintNFT = async () => { await this.state.artContract.connect(this.state.signer).safeMint({ value: ethers.utils.parseUnits('0.055', 'ether') }); };
-    buyNFT = async function (artId, price) { 
-        // var buyResult = await this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price })
-        // console.log(buyResult);
-    
-        this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => { this.setState({boughtItem: String(value)})});
-        console.log(1);
-        console.log(String(this.boughtItem));
-        
-    };
 
-    componentDidMount = async () => {
-        try {
-
-
-            const web3Modal = new Web3Modal();
-            const connection = await web3Modal.connect();
-            const provider = new ethers.providers.Web3Provider(connection);
-            const networkName = (await provider.getNetwork()).name;
-
-            const signer = await provider.getSigner();
-            const account = await signer.getAddress();
-
-            const shopContract = new ethers.Contract(shopAddress, Shop.abi, signer);
-            const artContract = new ethers.Contract(artAddress, BlockChainArt.abi, signer);
-
-
-            // https://ethereum.stackexchange.com/questions/91633/what-is-in-return-when-listening-to-an-event
-            //     event NFTBought(address indexed nftContract, address indexed buyer, uint indexed tokenId);
-
-            // shopContract.on('NFTBought', (nftContract, buyer, tokenId)
-
-
+    generateItemsList = async (shopContract, artContract) => {
+        console.log(shopContract);
+        if (shopContract != null) {
             const listedItems = await shopContract.fetchListedItems();
             let settings = { method: "Get" };
 
@@ -76,7 +47,6 @@ class App extends Component {
                 let q = await fetch(tokenURI, settings);
                 let json = await q.json();
                 uriMap.set(tokenId, json['image']);
-
             }
 
             const lists = listedItems.map(item => {
@@ -90,10 +60,57 @@ class App extends Component {
                     'priceOriginal': item.price
                 };
             })
+            return lists;
+        }
+        else {
+            return Map();
+        }
+    }
 
-            console.log(lists);
 
-            this.setState({ web3: web3Modal, signer: signer, account: account, shopContract: shopContract, networkName: networkName, artContract: artContract, listedItems: listedItems, lists: lists, shopOwner: null, artOwner: null }, this.runExample);
+    mintNFT = async () => { await this.state.artContract.connect(this.state.signer).safeMint({ value: ethers.utils.parseUnits('0.055', 'ether') }); };
+
+
+
+
+
+    buyNFT = async function (artId, price) {
+        this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => {
+            this.setState({ boughtItem: 'Awaiting buyItem transaction '+value.hash+'...' });
+            return value.wait();}).then((v) => {
+                console.log(v);
+            }).then((vv) => {
+                this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: 'Item purchased!' }));
+            });
+    };
+
+
+
+    componentDidMount = async () => {
+        try {
+
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            const networkName = (await provider.getNetwork()).name;
+
+            const signer = await provider.getSigner();
+            const account = await signer.getAddress();
+
+            const shopContract = new ethers.Contract(shopAddress, Shop.abi, signer);
+            const artContract = new ethers.Contract(artAddress, BlockChainArt.abi, signer);
+
+            // https://ethereum.stackexchange.com/questions/91633/what-is-in-return-when-listening-to-an-event
+            //     event NFTBought(address indexed nftContract, address indexed buyer, uint indexed tokenId);
+
+            const lists = await this.generateItemsList(shopContract, artContract);
+
+            this.setState({
+                web3: web3Modal, signer: signer, account: account, shopContract: shopContract, networkName: networkName, lists: lists,
+                artContract: artContract, shopOwner: null, artOwner: null
+            }, this.runExample);
+
+            
         } catch (error) {
             alert(
                 `Failed to load web3, accounts, or contract. Check console for details.`,
@@ -125,7 +142,7 @@ class App extends Component {
                     <p>Your account is is {this.state.account}</p>
                     <p>The shop contract ({this.state.shopContract.address}) owner is {this.state.shopOwner}</p>
                     <p>The art contract ({this.state.artContract.address}) owner is {this.state.artOwner}</p>
-                    <p>Your account is is {this.state.boughtItem}</p>
+                    <p>{this.state.boughtItem}</p>
 
                     <h2>Listed items</h2>
                     <Row xs={1} md={2} className="g-4">

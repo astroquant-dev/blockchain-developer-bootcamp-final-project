@@ -6,9 +6,9 @@ const art = await BlockchainArt.deployed()
 const artAddress = art.address;
 const shopAddress = shop.address;
 
-q = await art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') });
-tokenId = q['logs'][2]['args']['tokenId']['words'][0];
-await shop.listItem(artAddress, tokenId, ethers.utils.parseUnits((0.0001*(1.0+tokenId*1.0)), 'ether'), "Artwork " + tokenId);
+tokenId = (await art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') }))['logs'][2]['args']['tokenId']['words'][0]
+
+await shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId)
 
 
 
