@@ -27,7 +27,7 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
     event NFTMinted(address indexed nftContract);
     event ShopCreated(address indexed contractOwner);
     event NFTToBeBought(bytes32 artId);
-    event NFTBought(address indexed nftContract, address indexed buyer, uint indexed tokenId);
+    event NFTBought(address indexed nftContract, address indexed buyer, bytes32 indexed artId);
     event NFTListed(bytes32 indexed artId, address indexed nftcontract, uint indexed tokenId, address sender);
     struct ArtItem {
         bytes32 artId;
@@ -69,7 +69,7 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
         removeItem(artId);
         IERC721(nftContract).safeTransferFrom(owner, msg.sender, tokenId);
         payable(owner).call{value: msg.value}('');
-        emit NFTBought(nftContract, msg.sender, tokenId);
+        emit NFTBought(nftContract, msg.sender, artId);
 
     }
 

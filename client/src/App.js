@@ -56,6 +56,13 @@ class App extends Component {
             const shopContract = new ethers.Contract(shopAddress, Shop.abi, signer);
             const artContract = new ethers.Contract(artAddress, BlockChainArt.abi, signer);
 
+
+            // https://ethereum.stackexchange.com/questions/91633/what-is-in-return-when-listening-to-an-event
+            //     event NFTBought(address indexed nftContract, address indexed buyer, uint indexed tokenId);
+
+            // shopContract.on('NFTBought', (nftContract, buyer, tokenId)
+
+
             const listedItems = await shopContract.fetchListedItems();
             let settings = { method: "Get" };
 
