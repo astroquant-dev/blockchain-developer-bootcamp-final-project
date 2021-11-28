@@ -70,19 +70,16 @@ class App extends Component {
 
     mintNFT = async () => { await this.state.artContract.connect(this.state.signer).safeMint({ value: ethers.utils.parseUnits('0.055', 'ether') }); };
 
-
-
-
-
     buyNFT = async function (artId, price) {
-        this.setState({ boughtItem: ''});
+        this.setState({ boughtItem: '' });
         this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => {
-            this.setState({ boughtItem: 'Awaiting buyItem transaction '+value.hash+'...' });
-            return value.wait();}).then((v) => {
-                console.log(v);
-            }).then((vv) => {
-                this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: 'Item purchased!' }));
-            });
+            this.setState({ boughtItem: 'Awaiting buyItem transaction ' + value.hash + '...' });
+            return value.wait();
+        }).then((v) => {
+            console.log(v);
+        }).then((vv) => {
+            this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: 'Item purchased!' }));
+        });
     };
 
 
@@ -104,14 +101,14 @@ class App extends Component {
             // https://ethereum.stackexchange.com/questions/91633/what-is-in-return-when-listening-to-an-event
             //     event NFTBought(address indexed nftContract, address indexed buyer, uint indexed tokenId);
 
-                const lists = await this.generateItemsList(shopContract, artContract);
+            const lists = await this.generateItemsList(shopContract, artContract);
 
             this.setState({
                 web3: web3Modal, signer: signer, account: account, shopContract: shopContract, networkName: networkName, lists: lists,
                 artContract: artContract, shopOwner: null, artOwner: null
             }, this.runExample);
 
-            
+
         } catch (error) {
             alert(
                 `Failed to load web3, accounts, or contract. Check console for details.`,
