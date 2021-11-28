@@ -36,7 +36,7 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     }
 
     function safeMint() payable public returns (uint) {
-        require(msg.value >= artPrice);
+        require(msg.value >= artPrice, "Value paid is too low");
 
         uint tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();

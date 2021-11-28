@@ -1,3 +1,4 @@
+const truffleAssert = require('truffle-assertions');
 const Shop = artifacts.require("./Shop.sol");
 const BlockchainArt = artifacts.require("./BlockchainArt.sol");
 
@@ -7,6 +8,7 @@ const BlockchainArt = artifacts.require("./BlockchainArt.sol");
 contract("Shop owner", async accounts => {
 
     mintPrice = web3.utils.toWei("0.05", "ether");
+
     it("...Shop should be owned by sender",  async ()  => {
         const shop = await Shop.deployed();
         const account = await accounts[0];
@@ -23,6 +25,7 @@ contract("Shop owner", async accounts => {
 
     });
 
+
     it("...NFT should be owned by sender",  async () =>  {
         const shop = await Shop.new();
         const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
@@ -31,6 +34,7 @@ contract("Shop owner", async accounts => {
         const nftOwner = await art.ownerOf(0);
         assert.equal(accounts[0], nftOwner, "Minted NFT not owned by sender");
     });
+
 
     it("...NFT should be owned by buyer",  async () =>  {
         let mintPrice = web3.utils.toWei("0.05", "ether");
@@ -50,5 +54,43 @@ contract("Shop owner", async accounts => {
         const nftOwner1_1 = await art.ownerOf(1);
         assert.equal(accounts[3], nftOwner1_1, "NFT not owned by buyer");
     });
+
+    it("...NFT cannot be listed by anyone other than owner", async () => {
+        let mintPrice = web3.utils.toWei("0.05", "ether");
+        const shop = await Shop.new();
+        const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
+        const artOwner = await art.owner();
+        let _1 = await art.safeMint.sendTransaction({ from: accounts[2], value: web3.utils.toWei("0.055","ether")})
+        await truffleAssert.reverts(shop.listItem.sendTransaction(art.address, 0, web3.utils.toWei(web3.utils.toBN(1),"ether"), "1", { from: accounts[3]}), "Sender is not owner");
+    });
+
+    it("...NFT cannot be bought by owner", async () => {
+        let mintPrice = web3.utils.toWei("0.05", "ether");
+        const shop = await Shop.new();
+        const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
+        const artOwner = await art.owner();
+        let _1 = await art.safeMint.sendTransaction({ from: accounts[2], value: web3.utils.toWei("0.055","ether")})
+        let item1 = (await shop.listItem.sendTransaction(art.address, 0, web3.utils.toWei(web3.utils.toBN(1),"ether"), "1", { from: accounts[2]})).receipt.logs[0].args['artId'];
+        await truffleAssert.reverts(shop.buyItem.sendTransaction(item1, { from: accounts[2], value: web3.utils.toWei(web3.utils.toBN(1),"ether")}), "Sender already owns token");
+
+    });
+
+    it("...NFT cannot be bought for less than listing price", async () => {
+        let mintPrice = web3.utils.toWei("0.05", "ether");
+        const shop = await Shop.new();
+        const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
+        const artOwner = await art.owner();
+        let _1 = await art.safeMint.sendTransaction({ from: accounts[2], value: web3.utils.toWei("0.055","ether")})
+        let item1 = (await shop.listItem.sendTransaction(art.address, 0, web3.utils.toWei(web3.utils.toBN(1),"ether"), "1", { from: accounts[2]})).receipt.logs[0].args['artId'];
+        await truffleAssert.reverts(shop.buyItem.sendTransaction(item1, { from: accounts[3], value: web3.utils.toWei("0.99","ether")}), "Value sent is too low");
+    });
+
+    it("...NFT cannot be minted with less than minting price",  async () =>  {
+        const shop = await Shop.new();
+        const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
+        truffleAssert.reverts(art.safeMint.sendTransaction({ from: accounts[2], value: web3.utils.toWei("0.04","ether")}), "Value paid is too low");
+    });
+
+
 })
 
