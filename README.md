@@ -126,6 +126,6 @@ Open the browser and go to the local project URL. Make sure Metamask is installe
 ## Screencast recording
 [https://](https://)
 ## Ethereum address for certification
-xxxxxx
+0x9bC08568a537c4b69a360B8826B6BEe22F1cf16E (mainnet)
 
 
