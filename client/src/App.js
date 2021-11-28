@@ -19,8 +19,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 
-const shopaddress = "0xf7459bb090cCe1A6FA0803bcE59Bd0B2BdAf0477";
-const artaddress = "0xA8a90e950d8dee385b58751fD590e2327AeD88ef";
+const shopAddress = "0x6559CFFc7CF4d7a00cC393b9A71a43A1deB7F3Eb";
+const artAddress = "0xb9FC8a3fF1b09c50AbE74E4816003a8C5dF36b7a";
 
 
 
@@ -49,8 +49,8 @@ class App extends Component {
             const signer = await provider.getSigner();
             const account = await signer.getAddress();
 
-            const shopContract = new ethers.Contract(shopaddress, Shop.abi, signer);
-            const artContract = new ethers.Contract(artaddress, BlockChainArt.abi, signer);
+            const shopContract = new ethers.Contract(shopAddress, Shop.abi, signer);
+            const artContract = new ethers.Contract(artAddress, BlockChainArt.abi, signer);
 
             const listedItems = await shopContract.fetchListedItems();
             let settings = { method: "Get" };

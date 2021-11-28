@@ -32,9 +32,16 @@ For simplicity, the base ERC721 tokenURI for `BlockchainArt` has been prepopulat
 ## Deployed contracts
 Network: Rinkeby
 
-BlockchainArt: `0xA8a90e950d8dee385b58751fD590e2327AeD88ef`
+BlockchainArt: `0xb9FC8a3fF1b09c50AbE74E4816003a8C5dF36b7a`
 
-Shop: `0xf7459bb090cCe1A6FA0803bcE59Bd0B2BdAf0477`
+Shop: `0x6559CFFc7CF4d7a00cC393b9A71a43A1deB7F3Eb`
+
+## Directory structure
+
+- `client`: web frontend, written in React
+- `contracts`: smart contracts that have been created as part of this project
+- `migrations`: functionality that deploys the smart contracts in the desired network
+- `test`: smart contract tests
 
 ## Setup
 
@@ -71,6 +78,13 @@ For testing, run
 In order to compile and test on the rinkeby network, replace `--network development` with `--network rinkeby` above.
 
 ## Running the frontend client locally
+
+Ensure that the contract addresses defined in client/src/App.js point to the lcoally deployed contracts - modify the following lines in that file:
+
+    const shopAddress = "enter contract address here";
+    const artAddress = "enter contract address here";
+
+Ensure that metamask points to the local ganache instance.
 
 The client runs under the folder `client/`. Run
     cd client
