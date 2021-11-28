@@ -75,6 +75,7 @@ class App extends Component {
 
 
     buyNFT = async function (artId, price) {
+        this.setState({ boughtItem: ''});
         this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => {
             this.setState({ boughtItem: 'Awaiting buyItem transaction '+value.hash+'...' });
             return value.wait();}).then((v) => {
@@ -103,7 +104,7 @@ class App extends Component {
             // https://ethereum.stackexchange.com/questions/91633/what-is-in-return-when-listening-to-an-event
             //     event NFTBought(address indexed nftContract, address indexed buyer, uint indexed tokenId);
 
-            const lists = await this.generateItemsList(shopContract, artContract);
+                const lists = await this.generateItemsList(shopContract, artContract);
 
             this.setState({
                 web3: web3Modal, signer: signer, account: account, shopContract: shopContract, networkName: networkName, lists: lists,
