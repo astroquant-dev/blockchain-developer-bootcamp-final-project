@@ -9,6 +9,7 @@
     "get-json": "^1.0.1",
     "http": "^0.0.1-security",
     "node-fetch": "^3.1.0",
+    "node-http": "^0.0.5",
     "react": "^16.14.0",
     "react-bootstrap": "^2.0.0",
     "react-dom": "^16.14.0",

@@ -3619,6 +3619,11 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
+bupper@*:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/bupper/-/bupper-2.0.0.tgz#355808dc3e8e871d42eabf13c365ecd15a30eb79"
+  integrity sha1-NVgI3D6Ohx1C6r8Tw2Xs0Vow63k=
+
 bytes@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
@@ -4794,6 +4799,11 @@ detect-port-alt@1.1.6:
     address "^1.0.1"
     debug "^2.6.0"
 
+dever@*:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/dever/-/dever-2.0.0.tgz#e5b3224a61590dc2660bc965e0016a72c47e9074"
+  integrity sha1-5bMiSmFZDcJmC8ll4AFqcsR+kHQ=
+
 diff-sequences@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-26.6.2.tgz#48ba99157de1923412eed41db6b6d4aa9ca7c0b1"
@@ -5592,6 +5602,13 @@ eventsource@^1.0.7:
   integrity sha512-VSJjT5oCNrFvCS6igjzPAt5hBzQ2qPBFIbJ03zLI9SE0mxwZpMw6BfJrbFHm1a141AavMEB8JHmBhWAd66PfCg==
   dependencies:
     original "^1.0.0"
+
+eventy@*:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/eventy/-/eventy-2.0.0.tgz#c1d343b24a87a364103be31661736d317cced0f5"
+  integrity sha1-wdNDskqHo2QQO+MWYXNtMXzO0PU=
+  dependencies:
+    dever "*"
 
 evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   version "1.0.3"
@@ -8722,6 +8739,15 @@ node-gyp-build@^4.2.0, node-gyp-build@^4.3.0:
   resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.3.0.tgz#9f256b03e5826150be39c764bf51e993946d71a3"
   integrity sha512-iWjXZvmboq0ja1pUGULQBexmxq8CV4xBhX7VDOTbL7ZR4FOowwY/VOtRxBN/yKxmdGoIp4j5ysNT4u3S2pDQ3Q==
 
+node-http@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/node-http/-/node-http-0.0.5.tgz#5f506cfab89422f59eeedcb68e8b49aa2e8a52a1"
+  integrity sha1-X1Bs+riUIvWe7ty2jotJqi6KUqE=
+  dependencies:
+    bupper "*"
+    eventy "*"
+    reges "*"
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
@@ -10651,6 +10677,11 @@ regenerator-transform@^0.14.2:
   integrity sha512-eOf6vka5IO151Jfsw2NO9WpGX58W6wWmefK3I1zEGr0lOD0u8rwPaNqQL1aRxUaxLeKO3ArNh3VYg1KbaD+FFw==
   dependencies:
     "@babel/runtime" "^7.8.4"
+
+reges@*:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/reges/-/reges-0.0.3.tgz#50e7f6411a446c3b42108e54d30bc5497d3decc7"
+  integrity sha1-UOf2QRpEbDtCEI5U0wvFSX097Mc=
 
 regex-not@^1.0.0, regex-not@^1.0.2:
   version "1.0.2"
