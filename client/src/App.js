@@ -19,12 +19,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 // Rinkeby
-// const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
-// const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
+const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
+const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
 
 // Local 
-const shopAddress = "0x7cd6ec8E4BFF026429426d59b5aCFC42980F0EAc";
-const artAddress = "0x9ae9c3FeAE5285d604aa96bb934636119780613e";
+// const shopAddress = "0x7cd6ec8E4BFF026429426d59b5aCFC42980F0EAc";
+// const artAddress = "0x9ae9c3FeAE5285d604aa96bb934636119780613e";
 
 
 
