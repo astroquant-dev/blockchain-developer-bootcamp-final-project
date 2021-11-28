@@ -111,7 +111,7 @@ The following set of lines can be run a number of times, to populate the NFT lis
 
     q = await art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') });
     tokenId = q['logs'][2]['args']['tokenId']['words'][0];
-    await shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001*(1+v)), 'ether'), "Artwork " + tokenId);
+    await shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId);
 
 The first line mints a new NFT from the BlockchainArt contract. The second line fetches the tokenId for the minted token from the BlockchainArt.Minted event. The third line lists said tokenId in the Shop.
 

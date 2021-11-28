@@ -19,26 +19,28 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 // Rinkeby
-const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
-const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
+// const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
+// const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
 
 // Local 
-// const shopAddress = "0x5eD6fdA623f53cfe08583762E801DCff00caf2E3";
-// const artAddress = "0x41fE557618c9eC503f5bCc155E7f2088d72F3198";
+const shopAddress = "0x7cd6ec8E4BFF026429426d59b5aCFC42980F0EAc";
+const artAddress = "0x9ae9c3FeAE5285d604aa96bb934636119780613e";
 
 
 
 class App extends Component {
-    state = { storageValue: 0, web3: null, account: null, shopContract: null, artContract: null, shopOwner: null, artOwner: null };
+    state = { storageValue: 0, web3: null, account: null, shopContract: null, artContract: null, shopOwner: null, artOwner: null, boughtItem: ""};
 
     fetchListedItems = async () => { const shopResponse = await this.state.shopContract.fetchListedItems(); console.log(shopResponse); return shopResponse; }
     mintNFT = async () => { await this.state.artContract.connect(this.state.signer).safeMint({ value: ethers.utils.parseUnits('0.055', 'ether') }); };
     buyNFT = async function (artId, price) { 
-        var buyResult = await this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price })
-
-        console.log(buyResult);
+        // var buyResult = await this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price })
+        // console.log(buyResult);
     
-    
+        this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => { this.setState({boughtItem: String(value)})});
+        console.log(1);
+        console.log(String(this.boughtItem));
+        
     };
 
     componentDidMount = async () => {
@@ -70,8 +72,6 @@ class App extends Component {
             for await (var entry of listedItems.entries()) {
                 let tokenId = entry[1].tokenId;
                 let tokenURI = await artContract.tokenURI(tokenId);
-                console.log(tokenURI);
-                console.log(tokenId);
 
                 let q = await fetch(tokenURI, settings);
                 let json = await q.json();
@@ -122,8 +122,10 @@ class App extends Component {
 
                     <h1>NFT marketplace</h1>
                     <p>The network is {this.state.networkName}</p>
+                    <p>Your account is is {this.state.account}</p>
                     <p>The shop contract ({this.state.shopContract.address}) owner is {this.state.shopOwner}</p>
                     <p>The art contract ({this.state.artContract.address}) owner is {this.state.artOwner}</p>
+                    <p>Your account is is {this.state.boughtItem}</p>
 
                     <h2>Listed items</h2>
                     <Row xs={1} md={2} className="g-4">
@@ -133,7 +135,7 @@ class App extends Component {
                                     <Card.Body>
                                         <Card.Header>
                                             <Card.Title>
-                                                {_.artId}
+                                                ArtId: {_.artId}
                                             </Card.Title>
                                             <Card.Subtitle>Price: {_.price} ETH</Card.Subtitle>
                                             <Figure>
