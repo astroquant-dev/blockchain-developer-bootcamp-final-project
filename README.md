@@ -31,12 +31,14 @@ For simplicity, the base ERC721 tokenURI for `BlockchainArt` has been prepopulat
 
 ## Deployed contracts
 Network: Rinkeby
+
 BlockchainArt: `0xA8a90e950d8dee385b58751fD590e2327AeD88ef`
+
 Shop: `0xf7459bb090cCe1A6FA0803bcE59Bd0B2BdAf0477`
 
 ## Setup
 
-`yarn install` will install all packages and dependencies required, assuming Node.js >= v14, yarn, truffle, ganache-cli are present. 
+Running `yarn install` from the root project folder will install all packages and dependencies required, assuming Node.js >= v14, yarn, truffle, ganache-cli are present. 
 
 The local ganache-cli (note port 8545) and remote rinkeby networks are defined in the truffle-config.js file:
 
@@ -54,6 +56,7 @@ The local ganache-cli (note port 8545) and remote rinkeby networks are defined i
 The file .env in the root project folder should be populated as such, in order to replicate the connection to rinkeby via Infura, if need be:
 
 > INFURA_URL="https://rinkeby.infura.io/v3/[infura key]"
+
 > MNEMONIC="mnemonic phrase here"
 
 
@@ -70,9 +73,9 @@ In order to compile and test on the rinkeby network, replace `--network developm
 ## Running the frontend client locally
 
 The client runs under the folder `client/`. Run
-> cd client
-> yarn install
-> yarn start
+    cd client
+    yarn install
+    yarn start
 
 The client will appear on [http://localhost:3000/](http://localhost:3000/).
 
@@ -83,18 +86,18 @@ The client will appear on [http://localhost:3000/](http://localhost:3000/).
 
 Start by running `truffle console --network development` ensuring that ganache-cli is still running, then run, one line at a time:
 
-> const ethers = require("ethers");
-> const shop = await Shop.deployed();
-> const art = await BlockchainArt.deployed();
-> const artAddress = art.address;
-> const shopAddress = shop.address;
+    const ethers = require("ethers");
+    const shop = await Shop.deployed();
+    const art = await BlockchainArt.deployed();
+    const artAddress = art.address;
+    const shopAddress = shop.address;
 
 
 The following set of lines can be run a number of times, to populate the NFT listings:
 
-> q = await art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') });
-> tokenId = q['logs'][2]['args']['tokenId']['words'][0];
-> await shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001*(1+v)), 'ether'), "Artwork " + tokenId);
+    q = await art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') });
+    tokenId = q['logs'][2]['args']['tokenId']['words'][0];
+    await shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001*(1+v)), 'ether'), "Artwork " + tokenId);
 
 The first line mints a new NFT from the BlockchainArt contract. The second line fetches the tokenId for the minted token from the BlockchainArt.Minted event. The third line lists said tokenId in the Shop.
 
