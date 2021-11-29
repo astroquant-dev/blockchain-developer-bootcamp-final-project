@@ -72,15 +72,26 @@ class App extends Component {
 
     mintNFT = async () => { await this.state.artContract.connect(this.state.signer).safeMint({ value: ethers.utils.parseUnits('0.055', 'ether') }); };
 
+    // buyNFT = async function (artId, price) {
+    //     this.setState({ boughtItem: '' });
+    //     this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => {
+    //         this.setState({ boughtItem: 'Awaiting buyItem transaction ' + value.hash + '...' });
+    //         return value.wait();
+    //     }).then((vv) => {
+    //         this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: 'Item purchased!' }));
+    //     });
+    // };
     buyNFT = async function (artId, price) {
         this.setState({ boughtItem: '' });
         this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => {
             this.setState({ boughtItem: 'Awaiting buyItem transaction ' + value.hash + '...' });
             return value.wait();
-        }).then((v) => {
-            console.log(v);
-        }).then((vv) => {
-            this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: 'Item purchased!' }));
+        }, (error) => { console.log(error); 
+            let msg = 'data' in error ? msg = error['data']['message'] : error['message'];
+            this.setState({ boughtItem: msg});  }).then((vv) => {
+            console.log(vv);
+            if (vv != null)
+                this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: 'Item purchased!' }));
         });
     };
 
@@ -145,9 +156,9 @@ class App extends Component {
                     <p>The shop contract ({this.state.shopContract.address}) owner is {this.state.shopOwner}</p>
                     <p>The art contract ({this.state.artContract.address}) owner is {this.state.artOwner}</p>
                     {
-                        this.state.boughtItem == "Item purchased!" 
-                        ? <Alert variant='success'>{this.state.boughtItem}</Alert>
-                        : <Alert variant='light'>{this.state.boughtItem}</Alert>
+                        this.state.boughtItem == "Item purchased!"
+                            ? <Alert variant='success'>{this.state.boughtItem}</Alert>
+                            : <Alert variant='light'>{this.state.boughtItem}</Alert>
                     }
 
                     <h2>Listed items</h2>
@@ -171,7 +182,8 @@ class App extends Component {
                                         <Card.Footer>
                                             {_.canBuy
                                                 ? <Button value="Buy!" onClick={() => { this.buyNFT(_.artId, _.priceOriginal) }}>Buy now</Button>
-                                                : <Button value="Cannot buy" disabled>You already own this item, can't buy it!</Button>
+                                                // : <Button value="Buy!" onClick={() => { this.buyNFT(_.artId, _.priceOriginal) }}>Buy now</Button>
+                                                : <Button value="Cannot buy" disabled variant="secondary" >You already own this item, can't buy it!</Button>
 
                                             }
                                         </Card.Footer>
