@@ -49,9 +49,9 @@ Running `yarn install` from the root project folder will install all packages an
 The local ganache-cli (note port 8545) and remote rinkeby networks are defined in the truffle-config.js file:
 
         development: {
-        host: "127.0.0.1",     // Localhost (default: none)
-        port: 8545,            // Standard Ethereum port (default: none)
-        network_id: "*",       // Any network (default: none)
+            host: "127.0.0.1",     // Localhost (default: none)
+            port: 8545,            // Standard Ethereum port (default: none)
+            network_id: "*",       // Any network (default: none)
         },
         rinkeby: {
             provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.INFURA_URL),
