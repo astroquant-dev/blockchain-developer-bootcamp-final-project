@@ -17,14 +17,12 @@ contract("Shop owner", async accounts => {
     });
 
     it("...BlockchainArt should be owned by Shop",  async () =>  {
-
         const shop = await Shop.new();
         const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
         const artOwner = await art.owner();
         assert.equal(artOwner, shop.address, "BlockchainArt not owned by shop");
 
     });
-
 
     it("...NFT should be owned by sender",  async () =>  {
         const shop = await Shop.new();
@@ -35,9 +33,7 @@ contract("Shop owner", async accounts => {
         assert.equal(accounts[0], nftOwner, "Minted NFT not owned by sender");
     });
 
-
     it("...NFT should be owned by buyer",  async () =>  {
-        let mintPrice = web3.utils.toWei("0.05", "ether");
         const shop = await Shop.new();
         const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
         const artOwner = await art.owner();
@@ -56,7 +52,6 @@ contract("Shop owner", async accounts => {
     });
 
     it("...NFT cannot be listed by anyone other than owner", async () => {
-        let mintPrice = web3.utils.toWei("0.05", "ether");
         const shop = await Shop.new();
         const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
         const artOwner = await art.owner();
@@ -65,7 +60,6 @@ contract("Shop owner", async accounts => {
     });
 
     it("...NFT cannot be bought by owner", async () => {
-        let mintPrice = web3.utils.toWei("0.05", "ether");
         const shop = await Shop.new();
         const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
         const artOwner = await art.owner();
@@ -76,7 +70,6 @@ contract("Shop owner", async accounts => {
     });
 
     it("...NFT cannot be bought for less than listing price", async () => {
-        let mintPrice = web3.utils.toWei("0.05", "ether");
         const shop = await Shop.new();
         const art = await BlockchainArt.new(shop.address, "A", "B", mintPrice, "C");
         const artOwner = await art.owner();

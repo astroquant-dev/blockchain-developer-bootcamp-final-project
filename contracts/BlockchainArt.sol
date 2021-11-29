@@ -16,7 +16,7 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     address contractOwner;
     Counters.Counter private _tokenIdCounter;
     string public uri;
-    uint256 artPrice;
+    uint256 mintingPrice;
 
     event Minted(address sender, uint256 tokenId, address approval);
 
@@ -28,11 +28,10 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
         string memory uri_
     ) ERC721(name, symbol) {
         uri = uri_;
+        mintingPrice = price;
         contractOwner = owner;
         transferOwnership(owner);
         setApprovalForAll(contractOwner, true);
-
-        // require(owner == this.owner());
     }
 
     /** @notice Return base URI for contract's metadata
@@ -51,7 +50,7 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
         @dev tokenId counter is incremented, Minted event is emitted
         @return Number of tokens minted */
     function safeMint() public payable returns (uint256) {
-        require(msg.value >= artPrice, "Value paid is too low");
+        require(msg.value >= mintingPrice, "Value paid is too low");
 
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();

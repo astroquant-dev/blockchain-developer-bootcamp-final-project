@@ -58,24 +58,23 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
 
     /** @notice Purchase artwork artId
         @dev artId is unique per contract address and tokenId. Emits NFTBought
-        @param artId Unique identifier for a listed artwork
-    */
+        @param artId Unique identifier for a listed artwork */
     function buyItem(bytes32 artId) payable public {
 
         ArtItem storage artItem = artItems[artId];
-        address owner = IERC721(artItem.nftContract).ownerOf(artItem.tokenId);
+        address _owner = IERC721(artItem.nftContract).ownerOf(artItem.tokenId);
         uint tokenId = artItem.tokenId;
         address nftContract = artItem.nftContract;
 
-        require(owner != msg.sender, "Sender already owns token");
+        require(_owner != msg.sender, "Sender already owns token");
         require(artItem.forSale, "NFT not for sale");
         require(msg.value >= artItem.price, "Value sent is too low");
         require(msg.sender != address(0), "Sender is not null");
         require(artItem.currentOwner != address(0), "Owner is not null");
         // delete artItems[artId];
         removeItem(artId);
-        IERC721(nftContract).safeTransferFrom(owner, msg.sender, tokenId);
-        payable(owner).call{value: msg.value}('');
+        IERC721(nftContract).safeTransferFrom(_owner, msg.sender, tokenId);
+        payable(_owner).call{value: msg.value}('');
         emit NFTBought(nftContract, msg.sender, artId);
     }
 
@@ -87,22 +86,22 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
         @param title of artwork (not used)
         @return The artId identifier for listing */
     function listItem(address nftContract, uint tokenId, uint price, string memory title) public returns (bytes32) {
-        address owner = IERC721(nftContract).ownerOf(tokenId);
-        require(owner == msg.sender, "Sender is not owner");
+        address _owner = IERC721(nftContract).ownerOf(tokenId);
+        require(_owner == msg.sender, "Sender is not owner");
         bytes32 artId = hash1(nftContract, tokenId);
         ArtItem storage artItem = artItems[artId];
         require(artItem.forSale == false, "Item already listed");
 
         // artItems[artId] = ArtItem(artId, nftContract, owner, tokenId, title, price, true);
-        addItem(artId, nftContract, owner, tokenId, title, price);
+        addItem(artId, nftContract, _owner, tokenId, title, price);
         emit NFTListed(artItem.artId, artItem.nftContract, artItem.tokenId, msg.sender);
         return artItem.artId;
     }
 
-    function addItem(bytes32 artId, address nftContract, address owner, uint tokenId, string memory title, uint price) internal {
+    function addItem(bytes32 artId, address nftContract, address _owner, uint tokenId, string memory title, uint price) internal {
         artIdCounter.increment();
         if (artItems[artId].forSale == false) {
-            artItems[artId] = ArtItem(artId, nftContract, owner, tokenId, title, price, true);
+            artItems[artId] = ArtItem(artId, nftContract, _owner, tokenId, title, price, true);
             artIdToIndex[artId] = artIds.length;
             artIds.push(artId);
         }
@@ -132,9 +131,8 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
         return items;
     }
 
-
     /** @notice Show contract owner
-        @return Address of contract owner     */
+        @return Address of contract owner */
     function owner() public view returns (address) {
         return contractOwner;
     }
@@ -142,10 +140,5 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
     function onERC721Received(address, address, uint256, bytes memory) public virtual override returns (bytes4) {
         return this.onERC721Received.selector;
     }
-
-
-
-
-
 }
 
