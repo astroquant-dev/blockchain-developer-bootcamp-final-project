@@ -77,6 +77,12 @@ For testing, run
 
 In order to compile and test on the rinkeby network, replace `--network development` with `--network rinkeby` above.
 
+### Unit tests
+
+The project contains 8 unit tests that ensure that the two contracts work as expected, and interact as expected. Run on local network with
+
+> truffle test --show-events  --debug --network development
+
 ## Running the frontend client locally
 
 Ensure that the contract addresses defined in client/src/App.js point to the lcoally deployed contracts - modify the following lines in that file:
@@ -134,6 +140,7 @@ Open the browser and go to the local project URL. Make sure Metamask is installe
 
 ## Screencast recording
 [https://](https://)
+
 ## Ethereum address for certification
 0x9bC08568a537c4b69a360B8826B6BEe22F1cf16E (mainnet)
 
