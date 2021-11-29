@@ -93,9 +93,9 @@ Ensure that the contract addresses defined in client/src/App.js point to the lco
 Ensure that metamask points to the local ganache instance.
 
 The client runs under the folder `client/`. Run
-    cd client
-    yarn install
-    yarn start
+>    cd client
+>    yarn install
+>    yarn start
 
 The client will appear on [http://localhost:3000/](http://localhost:3000/).
 
