@@ -32,9 +32,10 @@ For simplicity, the base ERC721 tokenURI for `BlockchainArt` has been prepopulat
 ## Deployed contracts
 Network: Rinkeby
 
-BlockchainArt: `0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD`
+Shop: `0xb0df0B04be62ddcF556341420E80e0EFB235CbA9`
 
-Shop: `0xCDb89cB170477b969aCD3C36afe3844B872579e2`
+BlockchainArt: `0xE3fE89746062AAdC7B6e935B71F653368d75D482`
+
 
 ## Directory structure
 
