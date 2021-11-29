@@ -85,7 +85,7 @@ The project contains 8 unit tests that ensure that the two contracts work as exp
 
 ## Running the frontend client locally
 
-Ensure that the contract addresses defined in client/src/App.js point to the lcoally deployed contracts - modify the following lines in that file:
+Ensure that the contract addresses defined in client/src/App.js point to the locally deployed contracts - define them in the following lines in the file:
 
     const shopAddress = "enter contract address here";
     const artAddress = "enter contract address here";
