@@ -1,10 +1,12 @@
 # Project description
 
-The project implements an NFT gallery where different artworks can be listed for purchase.
+The project implements an NFT gallery where ERC721 artworks that have been listed can be purchased.
 
 In practice, there are two contracts that have been set up:
 - `Shop`, the NFT gallery, where digital artworks can either be listed by their owners at a given price, and purchased by the public for that price.
 - `BlockchainArt`, an ERC721 contract that can be used as an example of an artwork contract which the public can mint for a set price (0.0001 ETH in our case). 
+
+The frontend implements the gallery that is open to the public for the purchase of listed artworks.
 
 For this project, a [Pinata Cloud endpoint](https://gateway.pinata.cloud/ipfs/QmSp4boAHp9J7h7wMZutZkiJkcTN8MraW3BiMUSxoP27cs/) has been populated with a set of links to publicly-available artworks. This corresponds to the URI that BlockchainArt._baseURI() returns.
 
@@ -23,7 +25,7 @@ The deployment follows:
 # Technical details, instructions, testing
 
 ## Public URL
-[https://blockchainart.herokuapp.com/](https://blockchainart.herokuapp.com/). Free Heroku instances take about 30 seconds to boot up, please be patient.
+[https://blockchainart.herokuapp.com/](https://blockchainart.herokuapp.com/). Free Heroku instances take about 30 seconds to boot up, please be patient. Ensure you're on the Rinkeby network.
 
 ## Deployed contracts
 Network: Rinkeby
@@ -54,14 +56,14 @@ The local ganache-cli (note port 8545) and remote rinkeby networks are defined i
         rinkeby: {
             provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.INFURA_URL),
             network_id: 4,       
-            gas: 5500000,        // Ropsten has a lower block limit than mainnet
+            gas: 5500000,       
         },
 
 The file .env in the root project folder should be populated as such, in order to replicate the connection to rinkeby via Infura, if need be:
 
-> INFURA_URL="https://rinkeby.infura.io/v3/[infura key]"
+> INFURA_URL="https://rinkeby.infura.io/v3/insert_infura_key_here"
 
-> MNEMONIC="mnemonic phrase here"
+> MNEMONIC="wallet mnemonic phrase here"
 
 
 ## Compiling and testing
@@ -72,7 +74,7 @@ In order to compile the contracts locally and migrate them to the local ganache 
 For testing, run
 > truffle test --show-events  --debug --network development
 
-In order to compile and test on the rinkeby network, replace `--network development` with `--network rinkeby` above.
+In order to compile, deploy and test on the rinkeby network, replace `--network development` with `--network rinkeby` above.
 
 ### Unit tests
 

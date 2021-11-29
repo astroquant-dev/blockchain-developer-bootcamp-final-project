@@ -33,7 +33,7 @@ module.exports = {
     rinkeby: {
         provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.INFURA_URL),
         network_id: 4,       
-        gas: 5500000,        // Ropsten has a lower block limit than mainnet
+        gas: 5500000,        
     },
   },
   compilers: {
