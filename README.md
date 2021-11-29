@@ -107,7 +107,7 @@ Start by running `truffle console --network development` ensuring that ganache-c
     const shopAddress = shop.address;
 
 
-The following set of lines can be run a number of times, to populate the NFT listings, using a different account to mint the token each time (you may need to run one line at a time):
+The following set of lines can be run a number of times, to populate the NFT listings, using a different account to mint the token each time (again, you may need to run one line at a time):
 
     art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId) });
 

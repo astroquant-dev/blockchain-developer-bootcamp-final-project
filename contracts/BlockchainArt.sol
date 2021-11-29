@@ -8,17 +8,25 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
+/** @title Artworks contract
+    @author astroquant-dev
+    @notice Contract holds artworks used in the NFT shop */
 contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     using Counters for Counters.Counter;
     address contractOwner;
     Counters.Counter private _tokenIdCounter;
     string public uri;
-    uint artPrice;
+    uint256 artPrice;
 
-    event Minted(address sender, uint tokenId, address approval);
+    event Minted(address sender, uint256 tokenId, address approval);
 
-
-    constructor(address owner, string memory name, string memory symbol, uint price, string memory uri_) ERC721(name, symbol) {
+    constructor(
+        address owner,
+        string memory name,
+        string memory symbol,
+        uint256 price,
+        string memory uri_
+    ) ERC721(name, symbol) {
         uri = uri_;
         contractOwner = owner;
         transferOwnership(owner);
@@ -27,18 +35,25 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
         // require(owner == this.owner());
     }
 
+    /** @notice Return base URI for contract's metadata
+        @return Contract base URI */
     function _baseURI() internal view override returns (string memory) {
         return uri;
     }
 
-    function tokenCount() public view returns (uint) {
+    /** @notice Show number of tokens minted
+        @return Number of tokens minted */
+    function tokenCount() public view returns (uint256) {
         return _tokenIdCounter.current();
     }
 
-    function safeMint() payable public returns (uint) {
+    /** @notice Function used to mint new token. 
+        @dev tokenId counter is incremented, Minted event is emitted
+        @return Number of tokens minted */
+    function safeMint() public payable returns (uint256) {
         require(msg.value >= artPrice, "Value paid is too low");
 
-        uint tokenId = _tokenIdCounter.current();
+        uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
 
         _safeMint(msg.sender, tokenId);
@@ -48,10 +63,16 @@ contract BlockchainArt is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
         return tokenId;
     }
 
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
         super._burn(tokenId);
     }
 
+    /** @notice Return URI for given token
+        @param tokenId The token id
+        @return URI corresponding to tokenId */
     function tokenURI(uint256 tokenId)
         public
         view

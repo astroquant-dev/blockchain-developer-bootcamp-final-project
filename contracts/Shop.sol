@@ -10,6 +10,9 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./BlockchainArt.sol";
 
+/** @title NFT gallery.shop
+    @author astroquant-dev
+    @notice Contract keeps track of artwork listings and allows users to purchase them */
 contract Shop is IERC721Receiver, ReentrancyGuard {
     address payable private contractOwner;
     mapping(address=>mapping(uint=>uint)) prices;
@@ -39,11 +42,11 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
         bool forSale;
     }
 
-
     modifier onlyOwner {
         require(msg.sender == contractOwner);
         _;
     }
+
     constructor() {
         contractOwner = payable(msg.sender);
         emit ShopCreated(contractOwner);
@@ -53,6 +56,10 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
        return keccak256(abi.encodePacked(nftContract, tokenId));
     }
 
+    /** @notice Purchase artwork artId
+        @dev artId is unique per contract address and tokenId. Emits NFTBought
+        @param artId Unique identifier for a listed artwork
+    */
     function buyItem(bytes32 artId) payable public {
 
         ArtItem storage artItem = artItems[artId];
@@ -70,9 +77,15 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
         IERC721(nftContract).safeTransferFrom(owner, msg.sender, tokenId);
         payable(owner).call{value: msg.value}('');
         emit NFTBought(nftContract, msg.sender, artId);
-
     }
 
+    /** @notice List tokenId for a given contract
+        @dev artId is unique per contract address and tokenId. Emits NFTBought
+        @param nftContract ERC721 contract holding token
+        @param tokenId identifier for token that is to be listed, belonging to `nftContract`
+        @param price for token listed
+        @param title of artwork (not used)
+        @return The artId identifier for listing */
     function listItem(address nftContract, uint tokenId, uint price, string memory title) public returns (bytes32) {
         address owner = IERC721(nftContract).ownerOf(tokenId);
         require(owner == msg.sender, "Sender is not owner");
@@ -104,6 +117,8 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
         }
     }
 
+    /** @notice Fetch items that have been listed for sale
+        @return List of listed items */
     function fetchListedItems() public view returns (ArtItem[] memory) {
         ArtItem[] memory items = new ArtItem[](artIdCounter.current() - _soldArtIdCounter.current());
 
@@ -118,7 +133,8 @@ contract Shop is IERC721Receiver, ReentrancyGuard {
     }
 
 
-
+    /** @notice Show contract owner
+        @return Address of contract owner     */
     function owner() public view returns (address) {
         return contractOwner;
     }
