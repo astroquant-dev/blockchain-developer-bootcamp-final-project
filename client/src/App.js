@@ -14,7 +14,8 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Figure from 'react-bootstrap/Figure'
+import Figure from 'react-bootstrap/Figure';
+import Alert from 'react-bootstrap/Alert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
@@ -53,6 +54,7 @@ class App extends Component {
                 return {
                     'artId': item.artId,
                     'currentOwner': item.currentOwner,
+                    'canBuy': item.currentOwner != this.state.account,
                     'tokenId': item.tokenId,
                     'tokenURI': uriMap.get(item.tokenId),
                     'nftContract': item.currentOwner,
@@ -100,6 +102,7 @@ class App extends Component {
 
             // https://ethereum.stackexchange.com/questions/91633/what-is-in-return-when-listening-to-an-event
             //     event NFTBought(address indexed nftContract, address indexed buyer, uint indexed tokenId);
+            this.setState({ account: account });
 
             const lists = await this.generateItemsList(shopContract, artContract);
 
@@ -126,6 +129,8 @@ class App extends Component {
         this.setState({ shopOwner: shopResponse, artOwner: artResponse });
     };
 
+
+
     render() {
         if (!this.state.web3) {
             return <div>Loading Web3, accounts, and contract... make sure you're connected to Rinkeby or local ganache development network on MetaMask</div>;
@@ -136,11 +141,14 @@ class App extends Component {
                 <Container fluid>
 
                     <h1>NFT marketplace</h1>
-                    <p>The network is {this.state.networkName}</p>
                     <p>Your account is is {this.state.account}</p>
                     <p>The shop contract ({this.state.shopContract.address}) owner is {this.state.shopOwner}</p>
                     <p>The art contract ({this.state.artContract.address}) owner is {this.state.artOwner}</p>
-                    <p>{this.state.boughtItem}</p>
+                    {
+                        this.state.boughtItem == "Item purchased!" 
+                        ? <Alert variant='success'>{this.state.boughtItem}</Alert>
+                        : <Alert variant='light'>{this.state.boughtItem}</Alert>
+                    }
 
                     <h2>Listed items</h2>
                     <Row xs={1} md={2} className="g-4">
@@ -161,7 +169,11 @@ class App extends Component {
                                             Owned by {_.currentOwner}
                                         </Card.Text>
                                         <Card.Footer>
-                                            <Button value="Buy!" onClick={() => { this.buyNFT(_.artId, _.priceOriginal) }}>Buy now</Button>
+                                            {_.canBuy
+                                                ? <Button value="Buy!" onClick={() => { this.buyNFT(_.artId, _.priceOriginal) }}>Buy now</Button>
+                                                : <Button value="Cannot buy" disabled>You already own this item, can't buy it!</Button>
+
+                                            }
                                         </Card.Footer>
                                     </Card.Body>
                                 </Card>
