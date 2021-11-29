@@ -5,7 +5,7 @@ const BlockchainArt = artifacts.require("./BlockchainArt.sol");
 //https://github.com/dabit3/polygon-ethereum-nextjs-marketplace/blob/main/test/sample-test.js
 //https://github.com/devpavan04/cryptoboys-nft-marketplace/blob/main/src/contracts/CryptoBoys.sol
 //https://ethereum.stackexchange.com/questions/67097/returns-tx-object-instead-result-in-truffle-test
-contract("Shop owner", async accounts => {
+contract("Shop and BlockchainArt", async accounts => {
 
     mintPrice = web3.utils.toWei("0.05", "ether");
 
