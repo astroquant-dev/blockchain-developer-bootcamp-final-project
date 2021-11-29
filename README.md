@@ -6,7 +6,9 @@ In practice, there are two contracts that have been set up:
 - `Shop`, the NFT gallery, where digital artworks can either be listed by their owners at a given price, and purchased by the public for that price.
 - `BlockchainArt`, an ERC721 contract that can be used as an example of an artwork contract which the public can mint for a set price (0.0001 ETH in our case). 
 
-For simplicity, the base ERC721 tokenURI for `BlockchainArt` has been prepopulated with a set of publicly-available artworks on Pinata Cloud. The deployment follows:
+For this project, a [Pinata Cloud endpoint](https://gateway.pinata.cloud/ipfs/QmSp4boAHp9J7h7wMZutZkiJkcTN8MraW3BiMUSxoP27cs/) has been populated with a set of links to publicly-available artworks. This corresponds to the URI that BlockchainArt._baseURI() returns.
+
+The deployment follows:
 
     var BlockchainArt = artifacts.require("./BlockchainArt.sol");
     var Shop = artifacts.require("./Shop.sol");
@@ -15,12 +17,6 @@ For simplicity, the base ERC721 tokenURI for `BlockchainArt` has been prepopulat
         deployer.deploy(Shop).then(function(){
             return deployer.deploy(BlockchainArt, Shop.address, "BlockchainArt", "BCA", web3.utils.toWei("0.0001","ether"), "https://gateway.pinata.cloud/ipfs/QmSp4boAHp9J7h7wMZutZkiJkcTN8MraW3BiMUSxoP27cs/")});
     };
-
-
-
-
-
-
 
 
 
@@ -95,7 +91,9 @@ Ensure that metamask points to the local ganache instance.
 
 The client runs under the folder `client/`. Run
 >    cd client
+ 
 >    yarn install
+
 >    yarn start
 
 The client will appear on [http://localhost:3000/](http://localhost:3000/).
@@ -118,7 +116,7 @@ The following set of lines can be run a number of times, to populate the NFT lis
 
     art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId) });
 
-    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[1] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[1]}) });
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[1] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.001), 'ether'), "Artwork " + tokenId, {from: accounts[1]}) });
 
     art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[2] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[2]}) });
 
@@ -129,7 +127,8 @@ The following set of lines can be run a number of times, to populate the NFT lis
     art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[5] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[5]}) });
 
 
-The first line mints a new NFT from the BlockchainArt contract. The second line fetches the tokenId for the minted token from the BlockchainArt.Minted event. The third line lists said tokenId in the Shop.
+These commands mint the ERC721 tokens from different accounts, and list them for sale.
+
 
 Ensure there is ETH in the local address.
 
@@ -140,7 +139,7 @@ Open the browser and go to the local project URL. Make sure Metamask is installe
 
 
 ## Screencast recording
-[https://](https://)
+[https://www.loom.com/share/cda91a504d744c6ea861b8d9c0290d12](https://www.loom.com/share/cda91a504d744c6ea861b8d9c0290d12)
 
 ## Ethereum address for certification
 0x9bC08568a537c4b69a360B8826B6BEe22F1cf16E (mainnet)
