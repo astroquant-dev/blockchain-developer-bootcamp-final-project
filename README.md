@@ -107,9 +107,19 @@ Start by running `truffle console --network development` ensuring that ganache-c
     const shopAddress = shop.address;
 
 
-The following set of lines can be run a number of times, to populate the NFT listings:
+The following set of lines can be run a number of times, to populate the NFT listings, using a different account to mint the token each time (you may need to run one line at a time):
 
-    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') }).then((qqq) => { return parseInt(qqq.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).t(tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId) });
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether') }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId) });
+
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[1] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[1]}) });
+
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[2] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[2]}) });
+
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[3] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[3]}) });
+
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[4] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[4]}) });
+
+    art.safeMint({ value: ethers.utils.parseUnits('0.0001', 'ether'), from: accounts[5] }).then((tx) => { return parseInt(tx.logs.filter((v) => { return v.event == "Minted" })[0]['args']['tokenId']) }).then((tokenId) => { return shop.listItem(artAddress, tokenId, ethers.utils.parseUnits(String(0.0001), 'ether'), "Artwork " + tokenId, {from: accounts[5]}) });
 
 
 The first line mints a new NFT from the BlockchainArt contract. The second line fetches the tokenId for the minted token from the BlockchainArt.Minted event. The third line lists said tokenId in the Shop.
@@ -118,7 +128,7 @@ Ensure there is ETH in the local address.
 
 ### Buying items
 
-Open the browser and go to the local project URL. Make sure Metamask is installed, the localhost:8545 network is selected, and a different account to the one used for minting is chosen. After the listings are populated as above, a number of items will appear. By clicking on 'Buy now' under an item, the contract call buyItem will be triggered and the amount of ETH will be transferred.
+Open the browser and go to the local project URL. Make sure Metamask is installed, the localhost:8545 network is selected, _and a different account to the one used for minting is chosen._ After the listings are populated as above, a number of items will appear. By clicking on 'Buy now' under an item, the contract call buyItem will be triggered and the amount of ETH will be transferred. If you access the page with the same account you used to mint some of the items, the buy button will be disabled.
 
 
 

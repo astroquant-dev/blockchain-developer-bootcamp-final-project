@@ -8,7 +8,7 @@ import * as fetch from 'node-fetch';
 import Shop from "./contracts/Shop.json";
 import BlockChainArt from "./contracts/BlockChainArt.json";
 // import getWeb3 from "./getWeb3";
-import Web3Modal from 'web3modal'
+import Web3Modal from 'web3modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -20,12 +20,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
 // Rinkeby
-// const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
-// const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
+const shopAddress = "0xCDb89cB170477b969aCD3C36afe3844B872579e2";
+const artAddress = "0xBd84Ab0412cb1DB89B1A42c849e0BD12b4e55daD";
 
 // Local 
-const shopAddress = "0x7cd6ec8E4BFF026429426d59b5aCFC42980F0EAc";
-const artAddress = "0x9ae9c3FeAE5285d604aa96bb934636119780613e";
+// const shopAddress = "0x7cd6ec8E4BFF026429426d59b5aCFC42980F0EAc";
+// const artAddress = "0x9ae9c3FeAE5285d604aa96bb934636119780613e";
 
 
 
@@ -35,7 +35,6 @@ class App extends Component {
     fetchListedItems = async () => { const shopResponse = await this.state.shopContract.fetchListedItems(); console.log(shopResponse); return shopResponse; }
 
     generateItemsList = async (shopContract, artContract) => {
-        console.log(shopContract);
         if (shopContract != null) {
             const listedItems = await shopContract.fetchListedItems();
             let settings = { method: "Get" };
@@ -54,7 +53,7 @@ class App extends Component {
                 return {
                     'artId': item.artId,
                     'currentOwner': item.currentOwner,
-                    'canBuy': item.currentOwner != this.state.account,
+                    'canBuy': item.currentOwner !== this.state.account,
                     'tokenId': item.tokenId,
                     'tokenURI': uriMap.get(item.tokenId),
                     'nftContract': item.currentOwner,
@@ -84,14 +83,14 @@ class App extends Component {
     buyNFT = async function (artId, price) {
         this.setState({ boughtItem: '' });
         this.state.shopContract.connect(this.state.signer).buyItem(artId, { value: price }).then((value) => {
-            this.setState({ boughtItem: 'Awaiting buyItem transaction ' + value.hash + '...' });
+            this.setState({ boughtItem: <Alert variant='info'>{'Awaiting buyItem transaction ' + value.hash + '...'}</Alert> });
             return value.wait();
         }, (error) => { console.log(error); 
-            let msg = 'data' in error ? msg = error['data']['message'] : error['message'];
-            this.setState({ boughtItem: msg});  }).then((vv) => {
+            let msg = 'data' in error ? error['data']['message'] : error['message'];
+            this.setState({ boughtItem: <Alert variant='danger'>{msg}</Alert>});  }).then((vv) => {
             console.log(vv);
             if (vv != null)
-                this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: 'Item purchased!' }));
+                this.generateItemsList(this.state.shopContract, this.state.artContract).then((vvv) => this.setState({ lists: vvv, boughtItem: <Alert variant='success'>{'Item purchased!'}</Alert> }));
         });
     };
 
@@ -134,7 +133,7 @@ class App extends Component {
 
 
     runExample = async () => {
-        const { accounts, shopContract, artContract } = this.state;
+        const {  shopContract, artContract } = this.state;
         const shopResponse = await shopContract.owner();
         const artResponse = await artContract.owner();
         this.setState({ shopOwner: shopResponse, artOwner: artResponse });
@@ -155,16 +154,17 @@ class App extends Component {
                     <p>Your account is is {this.state.account}</p>
                     <p>The shop contract ({this.state.shopContract.address}) owner is {this.state.shopOwner}</p>
                     <p>The art contract ({this.state.artContract.address}) owner is {this.state.artOwner}</p>
-                    {
+                    {this.state.boughtItem}
+                    {/* {
                         this.state.boughtItem == "Item purchased!"
                             ? <Alert variant='success'>{this.state.boughtItem}</Alert>
                             : <Alert variant='light'>{this.state.boughtItem}</Alert>
-                    }
+                    } */}
 
                     <h2>Listed items</h2>
                     <Row xs={1} md={2} className="g-4">
                         {this.state.lists.map((_, idx) => (
-                            <Col>
+                            <Col key={idx}>
                                 <Card>
                                     <Card.Body>
                                         <Card.Header>
